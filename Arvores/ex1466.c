@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-// Structs
+// Structs - árvore
 typedef struct no {
 	int valor;
 	struct no* left;
@@ -13,7 +12,17 @@ typedef struct raiz {
 	No* inicio;
 } Raiz;
 
-// Métodos
+// Structs - fila
+typedef struct no_fila {
+	int valor;
+	struct no_fila* next;
+} No_fila;
+
+typedef struct cabeca {
+	No_fila* inicio;
+} Cabeca;
+
+// Métodos - árvore
 Raiz* criarRaiz() {
 	Raiz* root = (Raiz*) calloc(1, sizeof(Raiz));
 
@@ -78,40 +87,112 @@ void adicionarNo(Raiz* root, int valor) {
 	}
 }
 
-void apagaArvore(No* inicio) {
+void printPreorder(No* inicio) {
 	if (inicio != NULL) {
-		apagaArvore(inicio->left);
-		apagaArvore(inicio->right);
+		printf(" %d", inicio->valor);
+		printPreorder(inicio->left);
+		printPreorder(inicio->right);
+	}
+}
+
+void printInorder(No* inicio) {
+	if (inicio != NULL) {
+		printInorder(inicio->left);
+		printf(" %d", inicio->valor);
+		printInorder(inicio->right);
+	}
+}
+
+void printPosorder(No* inicio) {
+	if (inicio != NULL) {
+		printPosorder(inicio->left);
+		printPosorder(inicio->right);
+		printf(" %d", inicio->valor);
+	}
+}
+
+void printBreadthOrder(Raiz* root, Cabeca* head) {
+	
+}
+
+void apagarArvore(No* inicio) {
+	if (inicio != NULL) {
+		apagarArvore(inicio->left);
+		apagarArvore(inicio->right);
 		free(inicio);
 	}
 }
 
-void append(int fila[], int valor) {
-	int i = 0;
+// Métodos - fila
+Cabeca* criarFila() {
+	Cabeca* head = (Cabeca*) calloc(1, sizeof(Cabeca));
 
-	while (fila[i] != '\0') {
-		i++;
+	head->inicio = NULL;
+
+	return head;
+}
+
+No_fila* criarNo_fila(int valor) {
+	No_fila* node = (No_fila*) calloc(1, sizeof(No_fila));
+
+	node->valor = valor;
+	node->next = NULL;
+
+	return node;
+}
+
+void adicionarNo_fila(Cabeca* head, int valor) {
+	if (head == NULL) {
+		exit(-1);
+	}
+
+	No_fila* node = criarNo_fila(valor);
+	
+	if (head->inicio == NULL) {
+		head->inicio = node;
+
+		return;
+	}
+
+	No_fila* aux = head->inicio;
+
+	while (aux->next != NULL) {
+		aux = aux->next;
 	}
 	
-	fila[i] = valor;
+	aux->next = node;
 }
 
-void printBreadthSearch(No* inicio) {
-	if (inicio != NULL) {
-		
+No_fila* apagarNo_fila(Cabeca* head) {
+	if (head == NULL || head->inicio == NULL) {
+		exit(-1);
 	}
+	
+	No_fila* aux = head->inicio;
+	int valor = aux->valor;
+
+	aux = aux->next;
+	free(head->inicio);
+	head->inicio = NULL;
+
+	if (aux != NULL) {
+		head->inicio = aux;
+	}
+
+	return valor;
 }
 
-
-int todosNos[501];
 
 int main() {
 	int qtdTestes, qtdNos;
+	int todosNos[501];
 
 	scanf("%d", &qtdTestes);
 
 	for (int i = 1; i <= qtdTestes; i++) {
 		Raiz* root = criarRaiz();
+		Cabeca* head = criarFila();
+
 		scanf("%d", &qtdNos);
 
 		for (int j = 0; j < qtdNos; j++) {
@@ -121,16 +202,14 @@ int main() {
 		for (int j = 0; j < qtdNos; j++) {
 			adicionarNo(root, todosNos[j]);
 		}
-
-		memset(todosNos, 0, sizeof(todosNos));
 		
 		printf("Case %d:\n", i);
-		printBreadthSearch(root->inicio);
+		printBreadthOrder(root, head);
+
 		printf("\n\n");
 
-		apagaArvore(root->inicio);
+		apagarArvore(root->inicio);
 	}
-	
 
 	return 0;
 }
