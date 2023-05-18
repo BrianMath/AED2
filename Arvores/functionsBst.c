@@ -1,7 +1,11 @@
-#include "BST.h"
+#include "bst.h"
 
 Raiz* criarRaiz() {
 	Raiz* root = (Raiz*) calloc(1, sizeof(Raiz));
+
+	if (root == NULL) {
+		return NULL;
+	}
 
 	root->inicio = NULL;
 
@@ -108,6 +112,10 @@ void printPostorder(No* inicio) {
 		printPostorder(inicio->direita);
 		printf("%d ", inicio->valor);
 	}
+}
+
+void printBreadthOrder(No* inicio) {
+	
 }
 
 void apagarArvore(No* inicio) {

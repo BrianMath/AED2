@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "BST.h"
+#include "bst.h"
+#include "fila.h"
 
 
 void print(char* texto) {
@@ -72,21 +73,6 @@ int main() {
 
 			switch (opcao) {
 			case 1:
-				printf("Preorder: ");
-				printPreorder(root->inicio);
-				break;
-			
-			case 2:
-				printf("Inorder: ");
-				printInorder(root->inicio);
-				break;
-			
-			case 3:
-				printf("Postorder: ");
-				printPostorder(root->inicio);
-				break;
-			
-			case 4:
 				printf("Preorder:  ");
 				printPreorder(root->inicio);
 
@@ -94,6 +80,21 @@ int main() {
 				printInorder(root->inicio);
 
 				printf("\nPostorder: ");
+				printPostorder(root->inicio);
+				break;
+
+			case 2:
+				printf("Preorder: ");
+				printPreorder(root->inicio);
+				break;
+			
+			case 3:
+				printf("Inorder: ");
+				printInorder(root->inicio);
+				break;
+			
+			case 4:
+				printf("Postorder: ");
 				printPostorder(root->inicio);
 				break;
 			
